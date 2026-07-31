@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "knowledge-entry-frontmatter",
+  "title": ".knowledge entry frontmatter",
+  "type": "object",
+  "required": ["id", "title", "domain", "tags", "type", "scope", "status", "last_updated", "verified_on"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Unique kebab-case id; must equal the filename stem."
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "domain": { "enum": ["backend", "mlops", "deployment", "product", "ops", "process"] },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
+    },
+    "type": {
+      "enum": ["standard", "pattern", "runbook", "decision", "constraint", "glossary", "gotcha", "override", "context"]
+    },
+    "scope": { "enum": ["global", "local"] },
+    "status": { "enum": ["draft", "active", "deprecated", "superseded"] },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of last CONTENT change."
+    },
+    "verified_on": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the content was last confirmed still true (may differ from last_updated)."
+    },
+    "review_by": {
+      "type": "string",
+      "format": "date",
+      "description": "verified_on + interval-by-type. Required for every type except decision (ADRs are immutable records)."
+    },
+    "source": {
+      "type": "string",
+      "description": "Path or URL to the deliverable this entry was distilled from, e.g. docs/trd/foo.md."
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "owner": { "type": "string" },
+    "applies_to": { "type": "array", "items": { "type": "object" } },
+    "overrides": { "type": ["string", "null"], "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "supersedes": { "type": ["string", "null"], "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "related": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "override" } } },
+      "then": { "required": ["overrides"], "properties": { "overrides": { "type": "string" } } }
+    },
+    {
+      "if": { "not": { "properties": { "type": { "const": "decision" } } } },
+      "then": { "required": ["review_by"] }
+    }
+  ],
+  "additionalProperties": false
+}
