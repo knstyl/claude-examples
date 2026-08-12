@@ -12,8 +12,9 @@
 2. **Zero per-module opt-in.** All configuration lives in a convention plugin in `build-logic` (composite build via `includeBuild`). Tenant modules must get detekt automatically by applying the shared convention plugin — never by declaring detekt themselves.
 3. **Green from day one.** Generate a baseline per module for all existing violations. The gate fails only on *new* violations. Never block adoption on a retroactive cleanup.
 4. **Local gate must stay fast.** Plain `detekt` (no type resolution) runs locally as part of `check`. Type-resolution tasks (`detektMain`, `detektTest`) run in CI only. Verify Gradle build cache and configuration cache compatibility for all detekt tasks.
-5. **Formatting is not a failure mode.** Formatting is auto-fixed, not manually corrected. Use Spotless + ktlint with `spotlessApply`. Do **not** enable the `detekt-formatting` ruleset (avoid double-owning formatting). Detekt failures should always be genuine code smells worth a human/agent decision.
+5. **Formatting is not a failure mode.** Formatting is auto-fixed, not manually corrected. Use Spotless with ktlint as its engine — Spotless is the Gradle orchestration layer (`spotlessApply`/`spotlessCheck`, `ratchetFrom`, multi-filetype support); ktlint is the actual formatter, configured via the root `.editorconfig`. This is not a replacement of ktlint. Do **not** enable the `detekt-formatting` ruleset (avoid double-owning formatting). Detekt failures should always be genuine code smells worth a human/agent decision.
 6. **CI must also run detekt.** The local gate is bypassable by definition; CI re-runs it so nothing merges without passing.
+7. **Konsist stays.** The existing konsist suite is the home for architectural/structural rules (see task 7). Detekt does not replace it; do not remove or disable konsist tests.
 
 ---
 
@@ -65,16 +66,19 @@ Start from defaults, then explicitly enable/tune rules that matter for this code
 - CI additionally runs type-resolution tasks (`detektMain`, `detektTest`) — these unlock the higher-value rules and are acceptable to pay for in CI but not locally.
 - Fail the build on any non-baselined violation.
 
-### 7. Custom architectural rules (high value — do not skip)
+### 7. Architectural rules — implement in konsist, NOT as custom detekt rules
 
-Create a `detekt-rules` module in the monorepo (or in `build-logic`) with custom detekt rules encoding the platform's architectural conventions. Initial rule set:
+**Do not decommission konsist.** Konsist and detekt are complementary and own different layers:
 
-- **Tenant isolation:** a tenant module must not import from another tenant's package namespace. (Define the tenant package convention first if not already formalized.)
-- **Resolver constraints:** resolver classes must not invoke downstream API clients directly — only via the sanctioned service/client abstraction layer.
-- **Scope/naming conventions:** enforce naming conventions for `@scope`-related types/annotations per the schema governance decisions.
-- **Banned platform APIs:** anything the platform team decides tenants must not touch directly.
+- **Detekt owns code-level analysis:** smells, complexity, null-safety hygiene, and simple lexical bans (`ForbiddenMethodCall`/`ForbiddenImport` stay in detekt — they are configuration, not custom rules).
+- **Konsist owns architectural/structural assertions**, written as plain unit tests in the existing test suite. Extend the konsist suite with:
+  - **Tenant isolation:** a tenant module must not import from another tenant's package namespace. (Define the tenant package convention first if not already formalized.)
+  - **Resolver constraints:** resolver classes must not invoke downstream API clients directly — only via the sanctioned service/client abstraction layer.
+  - **Scope/naming conventions:** enforce naming conventions for `@scope`-related types/annotations per the schema governance decisions.
 
-Ship these with unit tests (detekt provides a test harness — use `detekt-test`). Register the ruleset in the convention plugin so all modules get it automatically. Where a convention isn't yet firmly decided, implement the rule but leave it inactive in `detekt.yml` with a comment, so activation is a one-line change.
+Konsist tests run as part of the normal test task, so they gate locally and in CI with no extra wiring. Note konsist has no baseline mechanism — each rule is pass/fail from day one — so before activating a rule, verify the current codebase passes it or fix the violations in the same change.
+
+**Only** write a custom detekt rule (separate `detekt-rules` module with `detekt-test` harness) when a check cannot be expressed in konsist, or when it would fail broadly on existing code and needs detekt's baseline mechanism for gradual rollout. Surface any such case back to me before building it.
 
 ### 8. Contributor experience
 
@@ -91,7 +95,7 @@ Ship these with unit tests (detekt provides a test harness — use `detekt-test`
 - [ ] Baselines are committed; no pre-existing violation blocks the build.
 - [ ] CI runs plain detekt on PRs and type-resolved detekt tasks; failures block merge.
 - [ ] Detekt XML reports are ingested by Sonar and findings are visible there; no duplicate findings from Sonar's native Kotlin rules.
-- [ ] At least one custom architectural rule (tenant isolation) is implemented, tested, and active.
+- [ ] At least one architectural rule (tenant isolation) is implemented as a konsist test and passing; the existing konsist suite remains intact and enabled.
 - [ ] Contributing docs updated.
 
 ## Out of scope
