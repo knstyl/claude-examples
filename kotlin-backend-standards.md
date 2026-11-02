@@ -8,6 +8,10 @@ The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** ar
 Rule IDs (e.g. `KT-NULL-1`) are stable so specs, reviews, and lint suppressions can reference them.
 Where a rule conflicts with an established convention in an existing codebase, the codebase convention wins and the deviation is recorded in that repo's AGENTS.md.
 
+This is the reference document: rationale, examples, and the full rule set for reviewers. The short always-loaded rule set for agents is `kotlin-agent-rules.md`, which cites rule IDs from here. Formatting and naming rules (sections 2–3) are enforced by ktlint and detekt and are intentionally left out of the agent file.
+
+All rules apply to new and changed code. Untouched code is not refactored to comply as part of unrelated work.
+
 ---
 
 ## 0. Non-negotiables
@@ -463,7 +467,8 @@ class OfferRoutesTest {
 
 ## 17. Definition of done for generated Kotlin code
 
-- Compiles with zero warnings; ktlint and detekt pass without new suppressions.
+- Compiles with zero warnings; ktlint and detekt pass with no new `@Suppress`, baseline entries, or lint-config changes.
+- The change is the smallest that satisfies the spec: no speculative abstractions, single-implementation interfaces, or refactors of untouched code.
 - No `!!`, `GlobalScope`, `runBlocking` (outside entry points/tests), `Thread.sleep`, blocking calls on call coroutines, or catch-all without `CancellationException` rethrow.
 - New bindings are constructor-injected, covered by the injector smoke test, and closeable resources are registered for shutdown.
 - New routes have `testApplication` tests covering success and each error mapping; coroutine logic is tested with `runTest`.
