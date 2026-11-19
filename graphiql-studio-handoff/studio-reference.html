@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GraphiQL Studio for Viaduct</title>
+
+</head>
+<body>
+
+
+
+
+<style>
+body{margin:0;background:#0E1014}
+a{color:#9DB4FF}a:hover{color:#C3D1FF}
+button{font:inherit;color:inherit}
+</style>
+
+<div style="min-height: 900px; display: flex; flex-direction: column; background: #0E1014; color: #E6E8EC; font-family: Inter, system-ui, sans-serif; font-size: 13px">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #22262F">
+  <div style="display: flex; align-items: center; gap: 10px; margin-right: 6px">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C9CFF" stroke-width="1.8" aria-hidden="true"><path d="M12 2.5 20.5 7.2v9.6L12 21.5 3.5 16.8V7.2z"/><path d="M12 2.5v19M3.5 7.2l17 9.6M20.5 7.2l-17 9.6"/></svg>
+    <span style="font-weight: 600; font-size: 15px; letter-spacing: -0.01em">GraphiQL</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: 12px; height: 36px; padding: 0 12px; background: #15181E; border: 1px solid #242832; border-radius: 10px; min-width: 0">
+    <span style="display: flex; align-items: center; gap: 8px; font-weight: 500; white-space: nowrap"><span style="width: 7px; height: 7px; border-radius: 50%; background: #4ADE80"></span>customer-graph</span>
+    <span style="width: 1px; height: 16px; background: #2A2F3A"></span>
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9AA1AD; white-space: nowrap">build 3f9a2c1 · Viaduct 2.0</span>
+    <span style="width: 1px; height: 16px; background: #2A2F3A"></span>
+    <span style="font-size: 11px; color: #9AA1AD; white-space: nowrap">4 tenant modules</span>
+  </div>
+  <div role="radiogroup" aria-label="Schema scope" style="display: flex; align-items: center; gap: 2px; height: 36px; padding: 3px; box-sizing: border-box; background: #15181E; border: 1px solid #242832; border-radius: 10px">
+    <span style="padding: 0 8px 0 6px; font-size: 11px; color: #9AA1AD; display: flex; align-items: center; gap: 5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Scope</span>
+    <button role="radio" style="height: 28px; padding: 0 10px; border: 0; border-radius: 7px; background: #262C39; color: #E6E8EC; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; cursor: pointer">default</button>
+    <button role="radio" style="height: 28px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; color: #9AA1AD; font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer">internal</button>
+  </div>
+  <button style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 10px 0 12px; background: transparent; border: 1px solid #242832; border-radius: 10px; color: #9AA1AD; cursor: pointer; flex: 1 1 200px; max-width: 320px">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <span style="flex: 1; text-align: left">Search types, resolvers, modules</span>
+    <kbd style="font-family: Inter, sans-serif; font-size: 11px; background: #1C2028; border: 1px solid #2A2F3A; border-radius: 5px; padding: 1px 6px">⌘K</kbd>
+  </button>
+  <div style="flex: 1"></div>
+  <span style="display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 10px; font-size: 12px; color: #F5B97A"><span style="width: 7px; height: 7px; border-radius: 50%; background: #F5B97A"></span>Staging</span>
+  <button aria-label="Share query link" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: transparent; border: 1px solid #242832; border-radius: 10px; cursor: pointer">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+  </button>
+  <button style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; background: #7C9CFF; border: 0; border-radius: 10px; color: #0B0D12; font-weight: 600; cursor: pointer">
+    <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg>
+    Run
+    <span style="font-size: 11px; font-weight: 500; opacity: 0.75">⌘↵</span>
+  </button>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1; min-height: 0">
+
+  <nav aria-label="Panels" style="flex: 0 0 56px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 0; border-right: 1px solid #22262F">
+    <button aria-label="Schema explorer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 0; background: #1C2230; color: #9DB4FF; cursor: pointer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    </button>
+    <button aria-label="Tenant modules" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 0; background: transparent; color: #9AA1AD; cursor: pointer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>
+    </button>
+    <button aria-label="History" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 0; background: transparent; color: #9AA1AD; cursor: pointer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    </button>
+    <button aria-label="Saved queries" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 0; background: transparent; color: #9AA1AD; cursor: pointer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+    </button>
+    <div style="flex: 1"></div>
+    <button aria-label="Settings" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 0; background: transparent; color: #9AA1AD; cursor: pointer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>
+    </button>
+  </nav>
+
+  <aside aria-label="Schema" style="flex: 1 1 270px; max-width: 310px; display: flex; flex-direction: column; border-right: 1px solid #22262F; background: #111318">
+    <div style="padding: 14px 14px 10px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <span style="font-weight: 600">Schema</span>
+        <span style="font-size: 11px; color: #9AA1AD">viewing scope <span style="font-family: 'JetBrains Mono', monospace; color: #E6E8EC">default</span></span>
+      </div>
+      <label style="display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; background: #15181E; border: 1px solid #242832; border-radius: 8px; color: #9AA1AD">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input placeholder="Filter fields or modules" aria-label="Filter fields or modules" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #E6E8EC; font: inherit">
+      </label>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: #9AA1AD">
+        <span style="display: flex; align-items: center; gap: 4px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: #7FD1C7; border: 1px solid #285B54; border-radius: 4px; padding: 0 4px">N</span>node</span>
+        <span style="display: flex; align-items: center; gap: 4px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: #9DB4FF; border: 1px solid #34437A; border-radius: 4px; padding: 0 4px">F</span>field</span>
+        <span style="display: flex; align-items: center; gap: 4px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: #F5B97A; border: 1px solid #6A4A2A; border-radius: 4px; padding: 0 4px">B</span>batch resolver</span>
+      </div>
+    </div>
+    <div style="padding: 4px 8px 12px; display: flex; flex-direction: column; gap: 1px; font-family: 'JetBrains Mono', monospace; font-size: 12px">
+      <button style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <span style="color: #7FB8FF; font-weight: 500">Query</span><span style="flex: 1"></span><span style="color: #9AA1AD; font-size: 11px">18</span>
+      </button>
+      <button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 8px 0 20px; border: 0; background: #1A1F2A; border-radius: 6px; cursor: pointer; text-align: left">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <span style="width: 14px; height: 14px; border-radius: 4px; background: #7C9CFF; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span>
+        <span>customer</span><span style="color: #9AA1AD">Customer</span><span style="flex: 1"></span>
+        <span style="font-size: 10px; font-weight: 500; color: #7FD1C7; border: 1px solid #285B54; border-radius: 4px; padding: 0 4px">N</span>
+        <span style="font-family: Inter, sans-serif; font-size: 10px; color: #B9BEC8; background: #1F242E; border-radius: 4px; padding: 1px 5px">profile</span>
+      </button>
+      <div style="display: flex; flex-direction: column; gap: 1px; margin-left: 33px; padding-left: 10px; border-left: 1px solid #242832">
+        <button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><span style="width: 14px; height: 14px; border-radius: 4px; background: #7C9CFF; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span>id</span><span style="color: #9AA1AD">ID!</span></button>
+        <button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><span style="width: 14px; height: 14px; border-radius: 4px; background: #7C9CFF; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span>displayName</span><span style="color: #9AA1AD">String</span></button>
+        <button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><span style="width: 14px; height: 14px; border-radius: 4px; background: #7C9CFF; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span>tier</span><span style="color: #9AA1AD">Tier</span><span style="flex: 1"></span><span style="font-size: 10px; font-weight: 500; color: #9DB4FF; border: 1px solid #34437A; border-radius: 4px; padding: 0 4px">F</span></button>
+        
+        
+          <div title="Only visible in the internal scope" style="display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; color: #6B7280"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span style="text-decoration: line-through; color: #8A93A3">riskSegment</span><span style="flex: 1"></span><span style="font-family: Inter, sans-serif; font-size: 10px; color: #8A93A3">internal only</span></div>
+        
+        <button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><span style="width: 14px; height: 14px; border-radius: 4px; background: #7C9CFF; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span>accounts</span><span style="color: #9AA1AD">[Account]</span><span style="flex: 1"></span><span style="font-size: 10px; font-weight: 500; color: #F5B97A; border: 1px solid #6A4A2A; border-radius: 4px; padding: 0 4px">B</span><span style="font-family: Inter, sans-serif; font-size: 10px; color: #B9BEC8; background: #1F242E; border-radius: 4px; padding: 1px 5px">accounts</span></button>
+        <button aria-pressed="true" style="display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><span style="width: 14px; height: 14px; border-radius: 4px; background: #7C9CFF; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0B0D12" stroke-width="3.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span>eligibility</span><span style="flex: 1"></span><span style="font-size: 10px; font-weight: 500; color: #9DB4FF; border: 1px solid #34437A; border-radius: 4px; padding: 0 4px">F</span><span style="font-family: Inter, sans-serif; font-size: 10px; color: #B9BEC8; background: #1F242E; border-radius: 4px; padding: 1px 5px">eligibility</span></button>
+      </div>
+      <button style="display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px 0 20px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span style="width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #3A404D; box-sizing: border-box"></span><span style="color: #B9BEC8">account</span><span style="color: #9AA1AD">Account</span><span style="flex: 1"></span><span style="font-size: 10px; font-weight: 500; color: #7FD1C7; border: 1px solid #285B54; border-radius: 4px; padding: 0 4px">N</span></button>
+      <button style="display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px 0 20px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span style="width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #3A404D; box-sizing: border-box"></span><span style="color: #B9BEC8">node</span><span style="color: #9AA1AD">Node</span></button>
+      <button style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; margin-top: 4px; border: 0; background: transparent; border-radius: 6px; cursor: pointer; text-align: left"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span style="color: #7FB8FF; font-weight: 500">Mutation</span><span style="flex: 1"></span><span style="color: #9AA1AD; font-size: 11px">6</span></button>
+    </div>
+    <div style="flex: 1"></div>
+    <div style="margin: 12px; padding: 14px; border: 1px solid #242832; border-radius: 12px; background: #15181E; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px"><span style="color: #7FB8FF">Customer</span><span style="color: #9AA1AD">.</span><span>accounts</span><span style="flex: 1"></span><span style="color: #9AA1AD">[Account!]</span></div>
+      <p style="margin: 0; color: #B9BEC8; line-height: 1.5">Every open account the customer holds, across all products.</p>
+      <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12px">
+        <dt style="color: #9AA1AD">Module</dt><dd style="margin: 0">accounts · Deposits team</dd>
+        <dt style="color: #9AA1AD">Resolver</dt><dd style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px">AccountsResolver <span style="color: #F5B97A">batch</span></dd>
+        <dt style="color: #9AA1AD">Scopes</dt><dd style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px">default, internal</dd>
+      </dl>
+      <a href="#" style="font-size: 12px; text-decoration: none">Open .graphqls source →</a>
+    </div>
+  </aside>
+
+  <main style="flex: 999 1 440px; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid #22262F">
+    <div role="tablist" aria-label="Open queries" style="display: flex; align-items: flex-end; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid #22262F; overflow-x: auto">
+      <button role="tab" aria-selected="true" style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 1px solid #22262F; border-bottom: 0; border-radius: 8px 8px 0 0; background: #111318; cursor: pointer; white-space: nowrap; margin-bottom: -1px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: #7FD1C7; background: #12302C; border-radius: 4px; padding: 1px 4px">Q</span>CustomerOverview<span aria-label="Unsaved changes" style="width: 6px; height: 6px; border-radius: 50%; background: #F5B97A"></span>
+      </button>
+      <button role="tab" aria-selected="false" style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 0; background: transparent; color: #9AA1AD; cursor: pointer; white-space: nowrap">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: #7FD1C7; background: #12302C; border-radius: 4px; padding: 1px 4px">Q</span>AccountByNode
+      </button>
+      <button role="tab" aria-selected="false" style="display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 0; background: transparent; color: #9AA1AD; cursor: pointer; white-space: nowrap">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; color: #FF9DB5; background: #3A1D27; border-radius: 4px; padding: 1px 4px">M</span>UpdateNickname
+      </button>
+      <button aria-label="New tab" style="width: 32px; height: 32px; margin-bottom: 2px; display: flex; align-items: center; justify-content: center; border: 0; background: transparent; color: #9AA1AD; border-radius: 8px; cursor: pointer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 14px; background: #111318; border-bottom: 1px solid #1C2028">
+      <span style="color: #9AA1AD">query</span><span style="color: #4A5060">/</span><span style="font-weight: 500">CustomerOverview</span>
+      <span style="font-size: 11px; color: #9AA1AD; border: 1px solid #2A2F3A; border-radius: 999px; padding: 2px 8px">touches 3 modules</span>
+      <span style="flex: 1"></span>
+      <button style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 0; background: transparent; color: #B9BEC8; border-radius: 6px; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Prettify</button>
+      <button style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 0; background: transparent; color: #B9BEC8; border-radius: 6px; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Copy as cURL</button>
+    </div>
+
+    <div style="flex: 1; min-height: 360px; background: #111318; padding: 14px 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 22px; overflow: auto">
+      <div style="display: flex; gap: 0; padding-left: 52px; margin-bottom: 2px">
+        <button style="display: flex; align-items: center; gap: 6px; padding: 0 6px; border: 0; background: transparent; color: #9DB4FF; font-family: Inter, sans-serif; font-size: 11px; cursor: pointer; border-radius: 4px"><svg width="9" height="9" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg>Run in default scope</button>
+        <span style="font-family: Inter, sans-serif; font-size: 11px; color: #9AA1AD">· last run 88 ms</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; white-space: pre">
+        <span style="text-align: right; color: #4A5060">1</span><span><span style="color: #C3A6FF">query</span> <span style="color: #7FD1C7">CustomerOverview</span><span style="color: #7A8291">(</span><span style="color: #FF9DB5">$id</span><span style="color: #7A8291">:</span> <span style="color: #7FB8FF">ID!</span><span style="color: #7A8291">) {</span></span>
+        <span style="text-align: right; color: #4A5060">2</span><span>  customer<span style="color: #7A8291">(</span><span style="color: #F5B97A">id</span><span style="color: #7A8291">:</span> <span style="color: #FF9DB5">$id</span><span style="color: #7A8291">) {</span></span>
+        <span style="text-align: right; color: #4A5060">3</span><span>    id</span>
+        <span style="text-align: right; color: #4A5060">4</span><span>    displayName</span>
+        <span style="text-align: right; color: #4A5060">5</span><span>    tier</span>
+        <span style="text-align: right; color: #9AA1AD; background: #1A1F2A">6</span><span style="background: #1A1F2A">    accounts <span style="color: #7A8291">{</span><span style="display: inline-block; width: 2px; height: 16px; background: #9DB4FF; vertical-align: -3px"></span></span>
+        <span style="text-align: right; color: #4A5060">7</span><span>      id</span>
+        <span style="text-align: right; color: #4A5060">8</span><span>      nickname</span>
+        <span style="text-align: right; color: #4A5060">9</span><span>      balance <span style="color: #7A8291">{</span> amount currency <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">10</span><span>      <span style="color: #7A8291">...</span> <span style="color: #C3A6FF">on</span> <span style="color: #7FB8FF">CreditCardAccount</span> <span style="color: #7A8291">{</span></span>
+        <span style="text-align: right; color: #4A5060">11</span><span>        creditLimit <span style="color: #7A8291">{</span> amount <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">12</span><span>        rewardsPoints</span>
+        <span style="text-align: right; color: #4A5060">13</span><span>      <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">14</span><span>    <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">15</span><span>    eligibility <span style="color: #7A8291">{</span></span>
+        <span style="text-align: right; color: #4A5060">16</span><span>      offers <span style="color: #7A8291">{</span> code headline <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">17</span><span>    <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">18</span><span>  <span style="color: #7A8291">}</span></span>
+        <span style="text-align: right; color: #4A5060">19</span><span><span style="color: #7A8291">}</span></span>
+      </div>
+    </div>
+
+    <section aria-label="Request options" style="border-top: 1px solid #22262F; background: #0E1014">
+      <div role="tablist" style="display: flex; align-items: center; gap: 4px; padding: 6px 10px">
+        <button role="tab" style="display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: #1C2028; color: #E6E8EC; font-weight: 500; cursor: pointer">Variables</button>
+        <button role="tab" style="display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: transparent; color: #9AA1AD; cursor: pointer">Headers <span style="font-size: 11px; color: #9AA1AD">2</span></button>
+        <span style="flex: 1"></span>
+        <span style="font-size: 11px; color: #4ADE80; display: flex; align-items: center; gap: 6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Matches operation signature</span>
+      </div>
+      
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 14px 14px 0">
+          <div style="flex: 1 1 260px; min-width: 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 22px; display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; white-space: pre">
+            <span style="text-align: right; color: #4A5060">1</span><span style="color: #7A8291">{</span>
+            <span style="text-align: right; color: #4A5060">2</span><span>  <span style="color: #9CC8FF">"id"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"Q3VzdG9tZXI6OGYyazE="</span></span>
+            <span style="text-align: right; color: #4A5060">3</span><span style="color: #7A8291">}</span>
+          </div>
+          <div style="flex: 0 1 280px; min-width: 0; padding: 10px 12px; border: 1px solid #242832; border-radius: 10px; background: #111318; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: #9AA1AD"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>GLOBAL ID HELPER</div>
+            <div style="display: flex; gap: 6px; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 12px">
+              <span style="padding: 5px 8px; border-radius: 6px; background: #1C2028; color: #7FB8FF">Customer</span>
+              <span style="color: #4A5060">:</span>
+              <span style="flex: 1; min-width: 0; padding: 5px 8px; border-radius: 6px; background: #1C2028">8f2k1</span>
+            </div>
+            <span style="font-size: 11px; color: #9AA1AD">Encodes to the <span style="font-family: 'JetBrains Mono', monospace">id</span> on the left. Paste any ID to decode it.</span>
+          </div>
+        </div>
+      
+      
+    </section>
+  </main>
+
+  <section aria-label="Response" style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; background: #0E1014">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #22262F">
+      <div role="tablist" aria-label="Response view" style="display: flex; padding: 3px; background: #15181E; border: 1px solid #242832; border-radius: 9px">
+        <button role="tab" style="height: 28px; padding: 0 14px; border: 0; border-radius: 6px; background: #262C39; color: #E6E8EC; font-weight: 500; cursor: pointer">JSON</button>
+        <button role="tab" style="height: 28px; padding: 0 14px; border: 0; border-radius: 6px; background: transparent; color: #9AA1AD; cursor: pointer">Table</button>
+        <button role="tab" style="height: 28px; padding: 0 14px; border: 0; border-radius: 6px; background: transparent; color: #9AA1AD; cursor: pointer">Resolvers</button>
+      </div>
+      <span style="flex: 1"></span>
+      <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #4ADE80; background: #10291B; border-radius: 6px; padding: 3px 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #4ADE80"></span>200 OK</span>
+      <span style="font-size: 12px; color: #B9BEC8">88 ms</span>
+      <span style="font-size: 12px; color: #9AA1AD">2.6 KB</span>
+    </div>
+
+    
+      <div style="flex: 1; padding: 14px 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 22px; overflow: auto; display: flex; flex-direction: column">
+        <div style="display: grid; grid-template-columns: 30px 1fr; column-gap: 4px; white-space: pre">
+          <span></span><span style="color: #7A8291">{</span>
+          <span></span><span>  <span style="color: #9CC8FF">"data"</span><span style="color: #7A8291">: {</span> <span style="color: #9CC8FF">"customer"</span><span style="color: #7A8291">: {</span></span>
+          <span></span><span>    <span style="color: #9CC8FF">"id"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"Q3VzdG9tZXI6OGYyazE="</span><span style="color: #7A8291">,</span> <span style="font-family: Inter, sans-serif; font-size: 11px; color: #7FB8FF; background: #172036; border-radius: 4px; padding: 1px 6px">Customer:8f2k1</span></span>
+          <span></span><span>    <span style="color: #9CC8FF">"displayName"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"Avery Chen"</span><span style="color: #7A8291">,</span></span>
+          <span></span><span>    <span style="color: #9CC8FF">"tier"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"GOLD"</span><span style="color: #7A8291">,</span></span>
+          <span style="text-align: right"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true" style="vertical-align: -1px"><path d="m6 9 6 6 6-6"/></svg></span><span>    <span style="color: #9CC8FF">"accounts"</span><span style="color: #7A8291">: [</span></span>
+          <span></span><span>      <span style="color: #7A8291">{</span> <span style="color: #9CC8FF">"id"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"QWNjb3VudDpjYzk5"</span><span style="color: #7A8291">,</span> <span style="color: #9CC8FF">"nickname"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"Travel card"</span><span style="color: #7A8291">,</span></span>
+          <span></span><span>        <span style="color: #9CC8FF">"balance"</span><span style="color: #7A8291">: {</span> <span style="color: #9CC8FF">"amount"</span><span style="color: #7A8291">:</span> <span style="color: #F5B97A">1240.18</span><span style="color: #7A8291">,</span> <span style="color: #9CC8FF">"currency"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"USD"</span> <span style="color: #7A8291">},</span></span>
+          <span></span><span>        <span style="color: #9CC8FF">"creditLimit"</span><span style="color: #7A8291">: {</span> <span style="color: #9CC8FF">"amount"</span><span style="color: #7A8291">:</span> <span style="color: #F5B97A">12000</span> <span style="color: #7A8291">},</span> <span style="color: #9CC8FF">"rewardsPoints"</span><span style="color: #7A8291">:</span> <span style="color: #F5B97A">48210</span> <span style="color: #7A8291">},</span></span>
+          <span style="text-align: right"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9AA1AD" stroke-width="2.4" aria-hidden="true" style="vertical-align: -1px"><path d="m9 6 6 6-6 6"/></svg></span><span>      <button style="font: inherit; font-family: Inter, sans-serif; font-size: 11px; color: #B9BEC8; background: #1C2028; border: 1px solid #2A2F3A; border-radius: 5px; padding: 0 8px; cursor: pointer">2 more accounts</button></span>
+          <span></span><span>    <span style="color: #7A8291">],</span></span>
+          <span></span><span>    <span style="color: #9CC8FF">"eligibility"</span><span style="color: #7A8291">: {</span> <span style="color: #9CC8FF">"offers"</span><span style="color: #7A8291">: [</span></span>
+          <span></span><span>      <span style="color: #7A8291">{</span> <span style="color: #9CC8FF">"code"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"CLI_2026Q4"</span><span style="color: #7A8291">,</span> <span style="color: #9CC8FF">"headline"</span><span style="color: #7A8291">:</span> <span style="color: #A8E6A1">"Credit line increase"</span> <span style="color: #7A8291">}</span></span>
+          <span></span><span>    <span style="color: #7A8291">] }</span></span>
+          <span></span><span>  <span style="color: #7A8291">} }</span></span>
+          <span></span><span style="color: #7A8291">}</span>
+        </div>
+        <div style="flex: 1"></div>
+        
+          <div style="margin: 14px 14px 0; padding: 10px 12px; display: flex; align-items: center; gap: 10px; border: 1px solid #3A2F1E; background: #1F1A12; border-radius: 10px; font-family: Inter, sans-serif; font-size: 12px; color: #F5D2A8">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            <span style="flex: 1; line-height: 1.4">This query runs in the <strong style="font-weight: 600">default</strong> scope. 3 fields on <span style="font-family: 'JetBrains Mono', monospace">Customer</span> are only visible in <span style="font-family: 'JetBrains Mono', monospace">internal</span>.</span>
+            <button style="border: 0; background: transparent; color: #F5D2A8; text-decoration: underline; cursor: pointer; font-size: 12px">Switch scope</button>
+          </div>
+        
+        
+      </div>
+    
+
+    
+
+    
+  </section>
+</div>
+
+<footer style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 6px 16px; border-top: 1px solid #22262F; font-size: 11px; color: #9AA1AD">
+  <span style="display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #4ADE80"></span>Valid in default scope</span>
+  <span>Ln 6, Col 14</span>
+  <span>Schema reloaded with build 3f9a2c1</span>
+  <span style="flex: 1"></span>
+  <span>Auto-save on</span>
+  <span>Press <kbd style="font-family: Inter, sans-serif; background: #1C2028; border: 1px solid #2A2F3A; border-radius: 4px; padding: 0 5px">?</kbd> for shortcuts</span>
+</footer>
+</div>
+
+
+</body>
+</html>
