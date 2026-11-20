@@ -177,3 +177,69 @@ Each phase should merge and ship on its own.
 ## Out of scope for v1
 
 Light theme; the Explorer and Focus variants from the design canvas; a Modules browser panel (the rail icon can stay disabled); saved queries synced to a server; subscriptions UI.
+
+
+## Arguments in the field picker
+
+Arguments are part of the picker, but they only appear when needed. Treat the mockup's expanded panels as the *editing* state, not the resting state. Reference screen: "01d · Studio — arguments in the field picker" on the design canvas.
+
+### When argument panels show
+- **Unticked field:** no panel. Show a short hint after the name: `statements(year*)`, `spendingSummary(period*, …2)`, `disputes(…1)`. `*` = required with no default; `…N` = number of optional args.
+- **Just ticked, or a required arg is missing:** the panel opens and focus moves to the first empty argument. A panel with an unresolved problem stays open.
+- **Valid:** the panel collapses to a one-line summary on the field row, e.g. `id: $id`, `first 20 · TRAVEL · since Oct 1`, `window: NEXT_30_DAYS`. Click the summary or press Enter on the row to reopen it.
+- **One panel open at a time.** Opening another collapses the previous one, unless it still has a problem.
+- **Follows the editor:** placing the cursor inside a field's arguments in the editor opens that field's panel. Moving away collapses it.
+
+### Binding: variable vs. value
+- Each arg row has a **$ variable / value** switch. Required args default to **$ variable**:
+  - ticking `customer` adds `$id: ID!` to the operation's parameter list and the key to Variables;
+  - switching to value writes the literal into the query and removes the variable.
+- The Variables drawer is the only place variable values live. An arg bound to a variable shows a `$name` chip that jumps to it. The picker never keeps its own copy.
+- Optional args nobody touches stay out of the query. Never write schema defaults into it.
+
+### Controls by type
+| Type | Control |
+|---|---|
+| Enum | Dropdown, deprecated values struck through. "Any" option omits the argument. |
+| Boolean | Toggle |
+| Int / Float | Number field. Schema default as placeholder. |
+| ID | Combo box with the Global ID helper. Type is pre-set from `@idOf` **[verify]**. |
+| Date / DateTime | Date input with expected format shown |
+| List | Chip input |
+| Input object | Collapsible group for shallow inputs. For deep inputs (mutation payloads), show "Edit in Variables →" and use the JSON editor's schema autocomplete instead of generating a form. |
+
+- **Fields with many args:** show required args and any already in use. The rest go behind "+ N optional", with search if N > 5.
+- **Pagination** (`first`/`after`/`last`/`before` on connection fields) becomes one control: `first N · from start`, **Next page** and **Start**.
+  - Next page copies `pageInfo.endCursor` from the last response into the bound `after` variable and re-runs the query.
+  - The result table's footer has the same Next page control.
+
+### Pre-filling required args (no schema default)
+Try these in order:
+1. **Last value used** for that argument in this environment. Stored in the browser per environment and labelled "last used".
+2. **From the last response:** offer IDs of the matching `@idOf` type found in the previous result ("Use Customer:8f2k1 from last result").
+3. **Shared test data** per environment, from server config (e.g. a staging test customer per module). Never in prod. **[verify]** whether such data already exists.
+4. Otherwise empty, with a placeholder: format example for IDs, chips for enums. **Never pre-select an enum value.**
+
+A non-null argument **with** a schema default (`arg: T! = X`) is not required. Show it pre-filled and marked "default", with no `*`. Leave it out of the query unless changed.
+
+### Validation
+- Neutral first: a ticked field with a missing required arg shows a grey "needs a value" hint, not an error.
+- It turns red only after a Run attempt, or when the user moves on and leaves it empty.
+- **On a failed Run:**
+  - the field row gets a marker;
+  - the editor line gets a red underline and an inline message;
+  - the response pane explains what's missing and offers a one-click fix where obvious;
+  - nothing is sent to the server.
+- An empty bound variable shows a placeholder in the Variables drawer, never `null`, so the drawer never looks valid when it isn't.
+
+### Two-way sync and limits
+- Args typed in the editor show up in the picker.
+- Where the editor holds something the picker can't represent, the row shows **"set in query"**, read-only, with "Move to a variable". Examples: a variable reused across fields, a nested input literal, directives.
+- **Out of scope for the picker:** `@include`/`@skip`, aliases and fragments. These stay editor-only.
+
+### Acceptance
+- Ticking a field with a required arg creates the variable, focuses the input, and shows "needs a value" without an error.
+- Collapsed rows show an accurate one-line summary of the arg values.
+- Next page round-trips: the cursor goes into the variable, the query re-runs, and the row range advances.
+- Switching variable ↔ value updates the parameter list, the query and the Variables drawer together.
+- Editing args in the editor updates the picker. Unrepresentable args show "set in query" and are never overwritten.
